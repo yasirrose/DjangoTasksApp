@@ -1,0 +1,38 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Login {% endblock %}
+
+{% block content %}
+    <div class="row  mb-auto mt-5">
+        <div class="col-md-6 offset-md-3">
+            <form class="mt-auto" method="POST" action="{% url 'signin' %}">
+                {% for message in messages %}
+                    <div class="alert {% if 'success' in message.tags %} alert-success {% elif 'warning' in message.tags %} alert-success {% elif 'error' in message.tags %} alert-danger {% endif %} alert-dismissible"
+                         role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                        {{ message }}
+                    </div>
+                {% endfor %}
+
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" name="username" class="form-control" id="username" aria-describedby="username_help"
+                           placeholder="Enter username">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" name="password" class="form-control" id="password" placeholder="Password">
+                </div>
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" name="remember_me" id="remember_me">
+                    <label class="form-check-label" for="remember_me">Remmember me</label>
+                </div>
+                <div class="form-group text-center">
+                    <button type="submit" class="btn btn-primary">Login</button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

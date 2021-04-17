@@ -1,0 +1,66 @@
+@import "variables";
+@import "~bootstrap/scss/bootstrap";
+
+// in your main SCSS file
+@import '~@fortawesome/fontawesome-free/scss/fontawesome.scss';
+// import one or more styles
+@import '~@fortawesome/fontawesome-free/scss/regular.scss';
+@import '~@fortawesome/fontawesome-free/scss/solid.scss';
+@import '~@fortawesome/fontawesome-free/scss/brands.scss';
+
+
+.card-body {
+    padding: 10px;
+}
+
+.custom-card {
+    position: relative;
+
+    .status {
+        position: absolute;
+        z-index: 2;
+        right: 10px;
+        top: 10px;
+
+        span:first-child {
+            margin-right: 15px;
+        }
+    }
+
+    .status-text {
+        display: block;
+        margin-bottom: 15px;
+    }
+}
+
+.details-span {
+    display: inline-block!important;
+    min-height: 25px;
+    margin-bottom: 12px;
+    .badge {
+        font-size: 80%;
+    }
+}
+
+.w-10 {
+    width: 10%!important;
+}
+.pointer {
+    cursor: pointer;
+}
+
+.add-note {
+    position: relative;
+    &-loader{
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: rgba(255,255,255,0.5);
+        visibility: hidden;
+    }
+}

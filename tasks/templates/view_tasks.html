@@ -1,0 +1,20 @@
+{% for recording in recordings %}
+    <div class="card">
+        <div class="card-body">
+            <div class="col-sm-10 offset-md-1">
+                <audio controls class="embed-responsive-item w-100" type="audio/wav">
+                    <source src="/media/{{ recording.voice_memo }}">
+                </audio>
+            </div>
+            <div class="d-flex align-items-end justify-content-end">
+                <p class="w-25">Created at: {{ recording.creation_date }}</p>
+                <p class="w-25">Added By: {{ recording.user.username }}</p>
+                <p class="w-25">Duration: {{ recording.duration }}</p>
+                <p class="w-10"><i class="fa fa-trash detete-note pointer" data-recording-id="{{ recording.id }}"></i></p>
+            </div>
+        </div>
+    </div>
+{% empty %}
+    <h5>No Voice Notes Found</h5>
+{% endfor %}
+

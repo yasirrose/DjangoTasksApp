@@ -1,0 +1,134 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} {{ task.title }} {% endblock %}
+
+{% block content %}
+
+
+    {% for message in messages %}
+        <div class="alert {% if 'success' in message.tags %} alert-success {% elif 'warning' in message.tags %} alert-success {% elif 'error' in message.tags %} alert-danger {% endif %} alert-dismissible"
+             role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                    aria-hidden="true">&times;</span></button>
+            {{ message }}
+        </div>
+    {% endfor %}
+
+
+    <div class="row mt-4">
+
+        <div class="col-8">
+            <h1 class="h1">Task Details: {{ task.id }}</h1>
+        </div>
+        <div class="col-4">
+            <a href="{% url 'index' %}" class="btn btn-primary float-right" title="Tasks List"><i
+                    class="fas fa-plus"></i> Tasks List</a>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card mb-1">
+                <div class="card-body custom-card">
+                    <div class="row">
+                        <div class="col-md-9">
+                            <h2 class="card-title" title="Task Title">{{ task.title }}</h2>
+
+                            <h4>Description: </h4>
+
+                            <p class="card-text">{{ task.description }}</p>
+
+                        </div>
+                        <div class="col-md-3">
+                            <div class="status-text">
+                                <span class="details-span"><strong>Created: </strong>{{ task.creation_date }}</span><br>
+                                <span class="details-span"><strong>Due Date: </strong>{{ task.due_date }}</span><br>
+                                <span class="details-span"><strong>Status: </strong>{% if task.status == 1 %}
+                                    Completed {% else %}
+                                    Pending
+                                {% endif %} </span>
+                                <br>
+                                <span class="details-span">
+                                    <strong>Users:</strong>
+                                    {% for u in users %}
+                                        <span class="badge badge-primary">
+                                        {% if u.username == request.user.name %}
+                                            <span class="badge badge-primary">me</span>
+                                        {% else %}
+                                            <span class="badge badge-primary">{{ u.username }}</span>
+                                        {% endif %}
+                                        </span>
+                                    {% endfor %}
+                                </span>
+                                <br>
+                                <span class="details-span"><strong>Created By: </strong><span
+                                        class="badge badge-primary">{{ task.created_by.username }}</span></span> <br>
+                                <span class="details-span"><strong>Actions: </strong></span><br>
+                                <a href="{% url 'task_edit' id=task.id %}" class="btn btn-primary"
+                                   title="Edit task"><span class="fa fa-edit"></span></a>
+                                {% if request.user.id == task.created_by_id %}
+                                    <a href="{% url 'task_delete' id=task.id %}"
+                                       onclick="return confirm('Are you sure to delete the task this action is irrversible?')"
+                                       class="btn btn-danger" title="Delete task"><i class="fa fa-trash"></i></a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div id="accordion">
+                        <div class="card">
+                            <div class="card-header" id="headingOne">
+                                <h5 class="mb-0">
+                                    <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne"
+                                            aria-expanded="true" aria-controls="collapseOne"
+                                            onclick="javascript:void(0);">
+                                        Voice Notes
+                                    </button>
+                                </h5>
+                            </div>
+
+                            <div id="collapseOne" class="collapse show" data-parent="#accordion">
+                                <div class="card-body" id="js-task-voice-notes" data-task-id="{{ task.id }}">
+                                    <h5>Loading ...</h5>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <hr>
+                        <div class="card card-body add-note">
+                            <div class="add-note-loader hide">
+                                <div class="spinner-border"></div>
+                            </div>
+                            <h5 class="card-title">Add Voice Note</h5>
+                            <div class="form-group">
+                                <div id="controls my-2">
+                                    <button class="btn btn-primary" id="recordButton"><i class="fa fa-microphone"></i>
+                                        Record
+                                    </button>
+                                    <button class="btn btn-info" id="pauseButton" disabled><i class="fa fa-pause"></i>
+                                        Pause
+                                    </button>
+                                    <button class="btn btn-danger" id="stopButton" disabled><span
+                                            class="fa-fa-stop"></span> Stop
+                                    </button>
+                                </div>
+
+                                <p id="formats"></p>
+                                <p id="status"></p>
+
+                                <p><strong>Recordings:</strong></p>
+                                <ol id="recordingsList">
+
+                                </ol>
+                            </div>
+                        </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

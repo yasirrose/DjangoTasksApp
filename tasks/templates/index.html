@@ -1,0 +1,73 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Index {% endblock %}
+
+{% block content %}
+
+    {% for message in messages %}
+        <div class="alert {% if 'success' in message.tags %} alert-success {% elif 'warning' in message.tags %} alert-success {% elif 'error' in message.tags %} alert-danger {% endif %} alert-dismissible"
+             role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                    aria-hidden="true">&times;</span></button>
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    <div class="row mt-4">
+
+        <div class="col-8">
+            <h1 class="h1">Tasks List</h1>
+        </div>
+
+        <div class="col-4">
+            <a href="{% url 'add_task' %}" class="btn btn-primary float-right" title="Add Task"><i
+                    class="fas fa-plus"></i> Task</a>
+        </div>
+
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-md-12">
+            {% for task in tasks %}
+                <div class="card mb-1">
+                    <div class="card-body custom-card">
+                    <div class="row">
+                        <div class="col-md-8">
+                             <h5 class="card-title">{{ task.title }}</h5>
+                        <p class="card-text">{{ task.description }}</p>
+                        </div>
+                        <div class="col-md-4">
+                             <div class="status-text">
+                            <span class="details-span"><strong>Created: </strong>{{ task.display_creation_date }}</span><br>
+                            <span class="details-span"><strong>Due Date: </strong>{{ task.display_due_date }}</span><br>
+                            <span class="details-span"><strong>Status: </strong>{% if task.status == "1" %}
+                                Completed {% else %}
+                                Pending
+                            {% endif %} </span>
+                            <br>
+                            <span><strong>Users:</strong>
+                                {% for u in task.user %}
+                                    <span class="badge badge-info">{{ u.user.username }}</span>
+                                {% endfor %}
+                            </span>
+                        </div>
+                        </div>
+                    </div>
+                        <a href="{% url 'task_details' id=task.id %}" class="btn btn-primary" title="View Details"><i class="fa fa-eye"></i> Details</a>
+                        <a href="{% url 'task_edit' id=task.id %}" class="btn btn-info" title="Edit Task"><i class="fa fa-edit"></i> Edit</a>
+
+                        {% if request.user.id == task.created_by_id %}
+                            <a href="{% url 'task_delete' id=task.id %}" onclick="return confirm('Are you sure to delete the task this action is irrversible?')" class="btn btn-danger" title="Delete Task"><i class="fa fa-trash"></i> Delete</a>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
+
+
+
+
+
+

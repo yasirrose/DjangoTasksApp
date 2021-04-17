@@ -1,0 +1,63 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Register {% endblock %}
+
+{% block content %}
+    <div class="row  mb-auto mt-5">
+        <div class="col-md-6 offset-md-3">
+            <form class="mt-auto" method="POST" action="{% url 'register' %}">
+                {% for message in messages %}
+                    <div class="alert {% if 'success' in message.tags %} alert-success {% elif 'warning' in message.tags %} alert-success {% elif 'error' in message.tags %} alert-danger {% endif %} alert-dismissible"
+                         role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                        {{ message }}
+                    </div>
+                {% endfor %}
+
+
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="first_name">First Name</label>
+                    <input type="text" name="first_name" class="form-control" id="first_name" required value="{{ first_name }}"
+                           placeholder="Enter first name">
+                </div>
+                <div class="form-group">
+                    <label for="last_name">Last Name</label>
+                    <input type="text" name="last_name" class="form-control" id="last_name" required value="{{ last_name }}"
+                           placeholder="Enter last name">
+                </div>
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" name="username" class="form-control" id="username" required value="{{ username }}"
+                           placeholder="Enter username">
+                    <small id="username_help" class="form-text text-muted">Enter your username</small>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" name="email" class="form-control" id="email" required value="{{ email }}"
+                           placeholder="Enter email">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" name="password" class="form-control" id="password" placeholder="Password" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirm_password">Confirm Password</label>
+                    <input type="password" name="confirm_password" class="form-control" id="confirm_password" required
+                           placeholder="Retype Password">
+                </div>
+
+                <div class="form-group">
+                    <label for="birthday">Birthday</label>
+                    <input type="date" name="birthday" class="form-control" id="birthday"  placeholder="Birthday" value="{{ birthday }}" required>
+                </div>
+
+                <div class="form-group text-center">
+                    <button type="submit" class="btn btn-primary">Register</button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

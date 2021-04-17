@@ -1,0 +1,122 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Add Task {% endblock %}
+
+{% block content %}
+    <div class="row mt-4">
+
+        <div class="col-8">
+            <h1 class="h1">Add Task</h1>
+        </div>
+
+        <div class="col-4">
+            <a href="{% url 'index' %}" class="btn btn-primary float-right" title="Tasks List"><i
+                    class="fas fa-plus"></i> Tasks List</a>
+        </div>
+
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <form id="add_task" method="POST" action="{% url 'add_task' %}">
+                {% for message in messages %}
+                    <div class="alert {% if 'success' in message.tags %} alert-success {% elif 'warning' in message.tags %} alert-success {% elif 'error' in message.tags %} alert-danger {% endif %} alert-dismissible"
+                         role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                        {{ message }}
+                    </div>
+                {% endfor %}
+
+                {% csrf_token %}
+
+                <div class="form-group">
+                    <label for="title">Title</label>
+                    <input type="text" class="form-control" id="title" name="title" required value="{{ data.title }}"
+                           aria-describedby="titleHelp" placeholder="Enter title">
+                </div>
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea class="form-control" name="description" id="description" rows="5" required placeholder="Description">{{ data.description }}</textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="due_date">Due Date</label>
+                    <input type="date" name="due_date" class="form-control" id="due_date" placeholder="Due Date" value="{{ data.due_date }}"
+                           required>
+                </div>
+
+                <div class="form-group ">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="1" id="status" name="status" {% if data.status == "1" %} checked {% endif %}>
+                        <label class="form-check-label" for="status">
+                            Completed
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group ">
+                    <label for="user">User</label>
+                    <select id="user" class="form-control" name="user[]" style="width: 100%" multiple="multiple" required>
+                        {% for user in users %}
+                            <option value="{{ user.id }}" {% if user.id in data.user %} selected {% endif %}>{{ user.username }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
+    <script type="text/javascript">
+
+        {#$(document).ready(function () {#}
+        {#    $.validator.addMethod("namevalidation", function (value, element) {#}
+        {#        return this.optional(element) || /^[a-zA-Z\s]+$/i.test(value);#}
+        {#    }, "Please specify a valid name");#}
+        {#    $("#add_task").validate({#}
+        {#        errorElement: 'span',#}
+        {#        errorClass: 'is-invalid text-danger',#}
+        {#        ignore: [],#}
+        {#        rules: {#}
+        {#            title: {#}
+        {#                namevalidation: true,#}
+        {#            },#}
+        {#            description: {#}
+        {#                namevalidation: true,#}
+        {#            },#}
+        {#        },#}
+        {#        highlight: function (element, errorClass, validClass) {#}
+        {#            $(element).addClass('is-invalid');#}
+        {#            console.log($(element));#}
+        {#            $(element).closest('.form-group').addClass('has-error has-feedback').removeClass('has-error has-feedback');#}
+        {#        },#}
+        {#        unhighlight: function (element, errorClass, validClass) {#}
+        {#            $(element).closest('.form-group').addClass('has-error has-feedback').removeClass('has-error has-feedback');#}
+        {#        },#}
+        {#        errorPlacement: function (error, element) {#}
+        {#            if (element.parent('.form-group').length) {#}
+        {#                error.insertAfter(element.parent());#}
+        {#            } else {#}
+        {#                error.insertAfter(element);#}
+        {#            }#}
+        {#            error.addClass('invalid-feedback');#}
+        {#        },#}
+        {#        submitHandler: function (form) {#}
+        {#            // form.submit();#}
+        {#        }#}
+        {#    });#}
+        //});
+
+        $(document).ready(function () {
+            if ($("#user")) {
+                $("#user").select2();
+            }
+        });
+    </script>
+
+{% endblock %}
